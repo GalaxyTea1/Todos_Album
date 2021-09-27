@@ -7,7 +7,7 @@ DetailPage.propTypes = {
 function DetailPage(props) {
     return (
         <div>
-            Todo Detail Page
+            Todo Detail Page!
         </div>
     );
 }
