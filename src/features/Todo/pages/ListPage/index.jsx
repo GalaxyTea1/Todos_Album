@@ -82,10 +82,16 @@ function ListPage(props) {
     const renderedTodoList = useMemo(() => {
         return todoList.filter(todo => filteredStatus === 'all' || filteredStatus === todo.status);
     }, [todoList, filteredStatus]);
-    // console.log(renderedTodoList);
 
     const handleTodoFormSubmit = (values) => {
         console.log('Form submit', values);
+        const newTodo = {
+            id: todoList.length + 1,
+            title: values.title,
+            status: 'new',
+        };
+        const newTodoList = [...todoList, newTodo];
+        setTodoList(newTodoList);
     }
 
     return (
