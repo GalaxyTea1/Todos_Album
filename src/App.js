@@ -1,9 +1,10 @@
-import TodoFeature from './features/Todo';
-import AlbumFeature from './features/Album';
-import NotFound from './components/NotFound';
-import { Switch, NavLink, Route } from 'react-router-dom';
 import { useEffect } from 'react';
+import { NavLink, Route, Switch } from 'react-router-dom';
 import productApi from './api/productApi';
+import NotFound from './components/NotFound';
+import AlbumFeature from './features/Album';
+import TodoFeature from './features/Todo';
+import TodoList from './features/Todo/pages/ListPage';
 
 function App() {
     useEffect(() => {
@@ -32,6 +33,7 @@ function App() {
             <Switch>
                 <Route path="/todos" component={TodoFeature} />
                 <Route path="/albums" component={AlbumFeature} />
+                <Route path="/" component={TodoList} />
                 <Route component={NotFound} />
             </Switch>
             Footer
