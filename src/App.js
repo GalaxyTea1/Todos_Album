@@ -3,6 +3,7 @@ import { NavLink, Route, Switch } from 'react-router-dom';
 import productApi from './api/productApi';
 import NotFound from './components/NotFound';
 import AlbumFeature from './features/Album';
+import CounterFeature from './features/Counter';
 import TodoFeature from './features/Todo';
 import TodoList from './features/Todo/pages/ListPage';
 
@@ -19,7 +20,6 @@ function App() {
     }, []);
     return (
         <div className="App">
-            Header
             <p>
                 <NavLink to="todos" activeClassName="active-menu">
                     Todos
@@ -31,12 +31,12 @@ function App() {
                 </NavLink>
             </p>
             <Switch>
+                <Route path="/" component={CounterFeature} />
                 <Route path="/todos" component={TodoFeature} />
                 <Route path="/albums" component={AlbumFeature} />
-                <Route path="/" component={TodoList} />
+                {/* <Route path="/" component={TodoList} /> */}
                 <Route component={NotFound} />
             </Switch>
-            Footer
         </div>
     );
 }
