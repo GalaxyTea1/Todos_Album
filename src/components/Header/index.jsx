@@ -59,7 +59,7 @@ export default function Header() {
             <Dialog disableEscapeKeyDown onBackdropClick="false" open={open} onClose={handleClose}>
                 <DialogContent>
                     <DialogContentText>
-                        <Register/>
+                        <Register closeDialog = {handleClose}/>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>

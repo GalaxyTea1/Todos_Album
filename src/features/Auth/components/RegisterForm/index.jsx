@@ -1,6 +1,6 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { LockOutlined } from '@mui/icons-material';
-import { Avatar, Button, Typography } from '@mui/material';
+import { Avatar, Button, Typography, LinearProgress } from '@mui/material';
 import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -17,7 +17,7 @@ const theme = createTheme();
 const useStyles = makeStyles((theme) => ({
     
     root: {
-       
+       position: "relative",
     },
 
     avatar: {
@@ -34,6 +34,12 @@ const useStyles = makeStyles((theme) => ({
     submit: {
         marginTop: '16px',
     },
+
+    progress: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+    }
     
 }));
 
@@ -45,7 +51,17 @@ function RegisterForm(props) {
     const classes = useStyles();
 
     const schema = yup.object({
-        
+        fullName: yup.string().required('Please enter your full name!')
+        .test('should has at least two words', 'Please enter at least two words.', value =>{
+            return value.split(' ').length >= 2;
+        }),
+
+        email: yup.string().required('Please enter your email.').email('Please enter a valid email address.'),
+        password: yup.string().required('Please enter your password').min(6, 'Please enter at least 6 characters.'),
+        retypePassword: yup
+        .string()
+        .required('Please retype your password.')
+        .oneOf([yup.ref('password')], 'Password does not match'),
     });
     const form = useForm({
         defaultValues: {
@@ -57,18 +73,21 @@ function RegisterForm(props) {
         resolver: yupResolver(schema),
     });
 
-    const handleSubmit = (values) => {
+    const handleSubmit = async (values) => {
         const { onSubmit } = props;
         if (onSubmit) {
-            onSubmit(values);
+           await onSubmit(values);
         }
-
-        form.reset();
     };
+
+    const {isSubmitting} = form.formState;
+
 
     return (
         <ThemeProvider theme={theme}>
         <div className = {classes.root}>
+            {isSubmitting && <LinearProgress style={{top: "8px"}} className={classes.progress}/>}
+
             <Avatar className={classes.avatar}>
                 <LockOutlined></LockOutlined>
             </Avatar>
@@ -83,7 +102,7 @@ function RegisterForm(props) {
                 <PasswordField name="password" label="Password" form={form} />
                 <PasswordField name="retypePassword" label="Retype Password" form={form} />
 
-                <Button type="submit" variant="contained" color="primary" className = {classes.submit} fullWidth>Create an account</Button>
+                <Button disabled={isSubmitting} type="submit" variant="contained" color="primary" className = {classes.submit} fullWidth>Create an account</Button>
             </form>
         </div>
         </ThemeProvider>

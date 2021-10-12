@@ -16,6 +16,16 @@ axiosClient.interceptors.request.use(
     },
     function (error) {
         // Do something with request error
+        const { config, status, data } = error.response;
+        if (config.url === '/auth/login/register' && status === 400) {
+            const errorList = data.data || [];
+            const firstError = errorList.length > 0 ? errorList[0] : {};
+            const messageList = firstError.message || [];
+            const firstMessage = messageList.length > 0 ? messageList[0] : {};
+
+            throw new Error(firstMessage.message);
+        }
+
         return Promise.reject(error);
     }
 );
