@@ -1,11 +1,11 @@
-import Visibility from '@mui/icons-material/Visibility';
-import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { FormHelperText, OutlinedInput } from '@mui/material';
-import Box from '@mui/material/Box';
-import FormControl from '@mui/material/FormControl';
-import IconButton from '@mui/material/IconButton';
-import InputAdornment from '@mui/material/InputAdornment';
-import InputLabel from '@mui/material/InputLabel';
+import { FormHelperText } from '@material-ui/core';
+import FormControl from '@material-ui/core/FormControl';
+import IconButton from '@material-ui/core/IconButton';
+import InputAdornment from '@material-ui/core/InputAdornment';
+import InputLabel from '@material-ui/core/InputLabel';
+import OutlinedInput from '@material-ui/core/OutlinedInput';
+import Visibility from '@material-ui/icons/Visibility';
+import VisibilityOff from '@material-ui/icons/VisibilityOff';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Controller } from 'react-hook-form';
@@ -28,33 +28,30 @@ function PasswordField(props) {
     };
 
     return (
-        <Box
-            sx={{
-                width: 500,
-                maxWidth: '100%',
-            }}
-        >
-            <FormControl error={hasError} fullWidth margin="normal" variant="outlined">
-                <InputLabel htmlFor="name">{label}</InputLabel>
-                <Controller
-                    name={name}
-                    control={form.control}
-                    as={OutlinedInput}
-                    id="name"
-                    type={showPassword ? 'text' : 'password'}
-                    label={label}
-                    endAdornment={
-                        <InputAdornment position="end">
-                            <IconButton aria-label="toggle password visibility" onClick={toggleShowPassword} edge="end">
-                                {showPassword ? <VisibilityOff /> : <Visibility />}
-                            </IconButton>
-                        </InputAdornment>
-                    }
-                    disabled={disabled}
-                />
-                <FormHelperText>{errors[name]?.message}</FormHelperText>
-            </FormControl>
-        </Box>
+        <FormControl error={hasError} fullWidth margin="normal" variant="outlined">
+            <InputLabel htmlFor={name}>{label}</InputLabel>
+            <Controller
+                name={name}
+                control={form.control}
+                as={OutlinedInput}
+                id={name}
+                type={showPassword ? 'text' : 'password'}
+                label={label}
+                endAdornment={
+                    <InputAdornment position="end">
+                        <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={toggleShowPassword}
+                            edge="end"
+                        >
+                            {showPassword ? <Visibility /> : <VisibilityOff />}
+                        </IconButton>
+                    </InputAdornment>
+                }
+                disabled={disabled}
+            />
+            <FormHelperText>{errors[name]?.message}</FormHelperText>
+        </FormControl>
     );
 }
 

@@ -1,37 +1,39 @@
 import { yupResolver } from '@hookform/resolvers/yup';
-import { LockOutlined } from '@mui/icons-material';
-import { Avatar, Button, Typography, LinearProgress } from '@mui/material';
-import { makeStyles } from '@mui/styles';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-import InputField from '../../../../components/form-controls/InputField';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import PasswordField from '../../../../components/form-controls/PasswordField';
-
-const theme = createTheme();
+import InputField from '../../../../components/form-controls/InputField/index';
+import Avatar from '@material-ui/core/Avatar';
+import LockOutlined from '@material-ui/icons/LockOutlined';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import { LinearProgress, makeStyles } from '@material-ui/core/';
+import PasswordField from '../../../../components/form-controls/PasswordField/index';
 
 const useStyles = makeStyles((theme) => ({
     root: {
+        paddingTop: theme.spacing(4),
         position: 'relative',
     },
 
     avatar: {
         margin: '0 auto',
+        backgroundColor: theme.palette.secondary.main,
     },
 
     title: {
-        margin: '16 0 32 0',
+        margin: theme.spacing(2, 0, 3, 0),
         textAlign: 'center',
     },
 
     submit: {
-        marginTop: '16px',
+        margin: theme.spacing(3, 0, 2, 0),
     },
 
     progress: {
         position: 'absolute',
+        top: theme.spacing(1),
         left: 0,
         right: 0,
     },
@@ -43,14 +45,18 @@ LoginForm.propTypes = {
 
 function LoginForm(props) {
     const classes = useStyles();
-
-    const schema = yup.object({
-        identifier: yup.string().required('Please enter your email.').email('Please enter a valid email address.'),
-        password: yup.string().required('Please enter your password'),
+    const schema = yup.object().shape({
+        username: yup
+            .string()
+            .required('Please enter your email.')
+            .email('Please enter a valid email address.'),
+        password: yup
+            .string()
+            .required('Please enter your password'),
     });
     const form = useForm({
         defaultValues: {
-            identifier: '',
+            username: '',
             password: '',
         },
         resolver: yupResolver(schema),
@@ -66,35 +72,31 @@ function LoginForm(props) {
     const { isSubmitting } = form.formState;
 
     return (
-        <ThemeProvider theme={theme}>
-            <div className={classes.root}>
-                {isSubmitting && <LinearProgress style={{ top: '8px' }} className={classes.progress} />}
+        <div className={classes.root}>
+            {isSubmitting && <LinearProgress className={classes.progress} />}
+            <Avatar className={classes.avatar}>
+                <LockOutlined></LockOutlined>
+            </Avatar>
+            <Typography className={classes.title} components="h3" variant="h5">
+                Sign In
+            </Typography>
 
-                <Avatar className={classes.avatar}>
-                    <LockOutlined></LockOutlined>
-                </Avatar>
-
-                <Typography component="h3" variant="h5" className={classes.title}>
+            <form onSubmit={form.handleSubmit(handleSubmit)}>
+                <InputField name="username" label="Email" form={form} />
+                <PasswordField name="password" label="Password" form={form} />
+                <Button
+                    disabled={isSubmitting}
+                    type="submit"
+                    className={classes.submit}
+                    fullWidth
+                    variant="contained"
+                    color="primary"
+                    size="large"
+                >
                     Sign In
-                </Typography>
-
-                <form onSubmit={form.handleSubmit(handleSubmit)}>
-                    <InputField name="identifier" label="Email" form={form} />
-                    <PasswordField name="password" label="Password" form={form} />
-
-                    <Button
-                        disabled={isSubmitting}
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        className={classes.submit}
-                        fullWidth
-                    >
-                        Sign in
-                    </Button>
-                </form>
-            </div>
-        </ThemeProvider>
+                </Button>
+            </form>
+        </div>
     );
 }
 

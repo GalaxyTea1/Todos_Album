@@ -15,23 +15,22 @@ function Login(props) {
     const {enqueueSnackbar} = useSnackbar();
 
     const handleSubmit = async (values) => {
-        // console.log('Handle Submit', values);
-        
-
         try {
-            const action = login(values)
-            const resultAction = await dispatch(action)
-            unwrapResult(resultAction)
+            const action = login(values);
+            const resultAction = await dispatch(action);
+            unwrapResult(resultAction);
 
-            // close dialog
+            // close Dialog
             const {closeDialog} = props;
             if (closeDialog) {
                 closeDialog();
             }
+            enqueueSnackbar('Login SuccessFully!', {variant: 'success'});
         } catch (error) {
             console.log('Failed to login:', error);
-            enqueueSnackbar(error.message, {variant: "error"})
+            enqueueSnackbar('Login Failure! Incorrect username or password', {variant: 'error'});
         }
+        
     }
     return (
         <div>

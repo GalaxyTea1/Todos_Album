@@ -1,26 +1,39 @@
-import { Close } from '@mui/icons-material';
-import MenuIcon from '@mui/icons-material/Menu';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import IconButton from '@mui/material/IconButton';
-import Toolbar from '@mui/material/Toolbar';
-import Typography from '@mui/material/Typography';
+import { AccountCircle, Close } from '@material-ui/icons/Close';
+import { makeStyles } from '@material-ui/core/styles';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
+import Button from '@material-ui/core/Button';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 import * as React from 'react';
 import { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import Login from '../../features/Auth/components/Login';
 import Register from '../../features/Auth/components/Register';
+import { Box, Dialog, DialogContent, DialogContentText } from '@material-ui/core';
 
 const MODE = {
     LOGIN: 'login',
     REGISTER: 'register',
 };
 
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+    },
+    menuButton: {
+        marginRight: theme.spacing(2),
+    },
+    title: {
+        flexGrow: 1,
+    },
+}));
+
 export default function Header() {
+    // const loggedInUser = useSelector(state => state.user.current);
+    // const isLoggedIn = !!loggedInUser.id;
     const [open, setOpen] = useState(false);
     const [mode, setMode] = useState(MODE.LOGIN);
 
@@ -31,39 +44,47 @@ export default function Header() {
     const handleClose = () => {
         setOpen(false);
     };
+    const classes = useStyles();
+
     return (
         <div>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static">
-                    <Toolbar>
-                        <IconButton size="large" edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                            <Link style={{ textDecoration: 'none', color: '#fff' }} to="/">
-                                Home
-                            </Link>
-                        </Typography>
+            <AppBar className={classes.root} position="static">
+                <Toolbar>
+                    <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
+                        <MenuIcon />
+                    </IconButton>
+                    <Typography variant="h6" className={classes.title}>
+                        News
+                    </Typography>
+                    <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/todos">
+                        <Button color="inherit">Todos</Button>
+                    </NavLink>
 
-                        <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/todos">
-                            <Button color="inherit">Todos</Button>
-                        </NavLink>
+                    <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/albums">
+                        <Button color="inherit">Albums</Button>
+                    </NavLink>
 
-                        <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/albums">
-                            <Button color="inherit">Albums</Button>
-                        </NavLink>
+                    <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/counter">
+                        <Button color="inherit">Counter</Button>
+                    </NavLink>
 
-                        <NavLink style={{ textDecoration: 'none', color: '#fff' }} to="/counter">
-                            <Button color="inherit">Counter</Button>
-                        </NavLink>
+                    <Button color="inherit" onClick={handleClickOpen}>
+                        Login
+                    </Button>
+                </Toolbar>
+            </AppBar>
 
-                        <Button color="inherit" onClick={handleClickOpen}>
-                            Register
-                        </Button>
-                    </Toolbar>
-                </AppBar>
-            </Box>
+            {/* {!isLoggedIn && (
+                            <Button color="inherit" onClick={handleClickOpen}>
+                            Login
+                            </Button>
+                        )}
 
+                        {isLoggedIn && (
+                            <IconButton color="inherit">
+                                <AccountCircle/>
+                            </IconButton>
+                        )} */}
             <Dialog disableEscapeKeyDown onBackdropClick="false" open={open} onClose={handleClose}>
                 <IconButton
                     style={{ position: 'absolute', top: '8px', right: '8px', zIndex: '1' }}
